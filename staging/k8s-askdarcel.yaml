@@ -14,10 +14,10 @@ kind: Deployment
 metadata:
  labels:
    app: web
-   keel.sh/policy: all     # update policy (available: patch, minor, major, all, force)
+   keel.sh/policy: force
    keel.sh/trigger: poll
  annotations:
-   # keel.sh/pollSchedule: "@every 10m"
+   keel.sh/pollSchedule: "@every 1m"
  name: web
 spec:
  selector:
@@ -30,7 +30,7 @@ spec:
        app: web
    spec:
      containers:
-     - image: sheltertechsf/askdarcel-web:latest
+     - image: index.docker.io/sheltertechsf/askdarcel-web:latest
        name: web
        ports:
        - containerPort: 80
@@ -82,10 +82,10 @@ kind: Deployment
 metadata:
  labels:
    app: api
-   keel.sh/policy: all     # update policy (available: patch, minor, major, all, force)
+   keel.sh/policy: force
    keel.sh/trigger: poll
  annotations:
-       # keel.sh/pollSchedule: "@every 10m"
+   keel.sh/pollSchedule: "@every 1m"
  name: api
 spec:
  selector:
@@ -98,7 +98,7 @@ spec:
        app: api
    spec:
      containers:
-     - image: sheltertechsf/askdarcel-api:latest
+     - image: index.docker.io/sheltertechsf/askdarcel-api:latest
        name: api
        ports:
        - containerPort: 8080
