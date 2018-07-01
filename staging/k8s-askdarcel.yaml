@@ -1,0 +1,168 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  tls:
+  - secretName: origin-cert-secret
+  backend:
+    serviceName: web
+    servicePort: 80
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+ labels:
+   app: web
+   keel.sh/policy: all     # update policy (available: patch, minor, major, all, force)
+   keel.sh/trigger: poll
+ annotations:
+   # keel.sh/pollSchedule: "@every 10m"
+ name: web
+spec:
+ selector:
+   matchLabels:
+     app: web
+ replicas: 1
+ template:
+   metadata:
+     labels:
+       app: web
+   spec:
+     containers:
+     - image: sheltertechsf/askdarcel-web:latest
+       name: web
+       ports:
+       - containerPort: 80
+       env:
+       - name: ALGOLIA_APPLICATION_ID
+         valueFrom:
+           secretKeyRef:
+              name: algolia
+              key: algolia-application-id
+       - name: ALGOLIA_INDEX
+         value: "staging_services_search"
+       - name: ALGOLIA_INDEX_PREFIX
+         value: "staging"
+       - name: ALGOLIA_READ_ONLY_API_KEY
+         valueFrom:
+           secretKeyRef:
+              name: algolia
+              key: algolia-read-only-api-key
+       - name: API_URL
+         value: "http://api.default.svc.cluster.local:8080"
+       - name: environment
+         value: "production"
+       - name: GOOGLE_API_KEY
+         valueFrom:
+           secretKeyRef:
+              name: google
+              key: google-api-key
+       - name: PORT
+         value: "80"
+       - name: SERVER_NAME
+         value: "newstaging.askdarcel.org"
+     restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+ labels:
+   app: web
+ name: web
+spec:
+ type: LoadBalancer
+ ports:
+ - port: 80
+ selector:
+   app: web
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+ labels:
+   app: api
+   keel.sh/policy: all     # update policy (available: patch, minor, major, all, force)
+   keel.sh/trigger: poll
+ annotations:
+       # keel.sh/pollSchedule: "@every 10m"
+ name: api
+spec:
+ selector:
+   matchLabels:
+     app: api
+ replicas: 1
+ template:
+   metadata:
+     labels:
+       app: api
+   spec:
+     containers:
+     - image: sheltertechsf/askdarcel-api:latest
+       name: api
+       ports:
+       - containerPort: 8080
+       env:
+       - name: ALGOLIA_API_KEY
+         valueFrom:
+           secretKeyRef:
+              name: algolia
+              key: algolia-api-key
+       - name: ALGOLIA_APPLICATION_ID
+         valueFrom:
+           secretKeyRef:
+              name: algolia
+              key: algolia-application-id
+       - name: ALGOLIA_INDEX
+         value: "staging_services_search"
+       - name: ALGOLIA_INDEX_PREFIX
+         value: "staging"
+       - name: ALGOLIA_READ_ONLY_API_KEY
+         valueFrom:
+           secretKeyRef:
+              name: algolia
+              key: algolia-read-only-api-key
+       - name: DATABASE_PASSWORD
+         valueFrom:
+           secretKeyRef:
+              name: database
+              key: database-password
+       - name: DATABASE_URL
+         value: "postgres://localhost:5432/askdarcel"
+       - name: DATABASE_USERNAME
+         valueFrom:
+           secretKeyRef:
+              name: database
+              key: database-username
+       - name: SECRET_KEY_BASE
+         valueFrom:
+           secretKeyRef:
+              name: secret-key
+              key: secret-key-base
+     - name: cloudsql-proxy
+       image: gcr.io/cloudsql-docker/gce-proxy:1.11
+       command: ["/cloud_sql_proxy",
+       "-instances=askdarcel-staging-208823:us-central1:askdarcel-staging-db=tcp:5432",
+        "-credential_file=/secrets/cloudsql/credentials.json"]
+       volumeMounts:
+         - name: cloudsql-instance-credentials
+           mountPath: /secrets/cloudsql
+           readOnly: true
+     volumes:
+       - name: cloudsql-instance-credentials
+         secret:
+           secretName: cloudsql-instance-credentials
+     restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+ labels:
+   app: api
+ name: api
+spec:
+ type: ClusterIP
+ ports:
+ - port: 8080
+ selector:
+   app: api
