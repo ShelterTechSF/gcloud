@@ -61,7 +61,7 @@ spec:
        - name: PORT
          value: "80"
        - name: SERVER_NAME
-         value: "newstaging.askdarcel.org"
+         value: "staging.askdarcel.org"
        - name: MOHCD_SUBDOMAIN
          value: help
      restartPolicy: Always
