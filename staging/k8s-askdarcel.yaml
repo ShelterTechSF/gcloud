@@ -62,6 +62,8 @@ spec:
          value: "80"
        - name: SERVER_NAME
          value: "newstaging.askdarcel.org"
+       - name: MOHCD_SUBDOMAIN
+         value: help
      restartPolicy: Always
 ---
 apiVersion: v1
