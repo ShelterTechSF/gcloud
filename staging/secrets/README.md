@@ -31,3 +31,8 @@ Not sure what this is for
 ```
 kubectl create secret generic secret-key --from-file /tmp/askdarcel-staging-secrets/secret-key-base
 ```
+## Keel Slack Integration
+Not sure what this is for
+```
+kubectl create secret generic keel-slack --from-literal=slack-token='TOKEN_VALUE' --namespace keel
+```

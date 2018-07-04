@@ -100,26 +100,15 @@ spec:
               value: "askdarcel-staging-208823"
             # - name: WEBHOOK_ENDPOINT
             #   value: https://my.webhookrelay.com/v1/webhooks/2fc52b16-75f7-41f2-8e2d-81afbbcae709
-            # - name: SLACK_TOKEN
-            #   value: your-token-here
-            # - name: SLACK_CHANNELS
-            #   value: general
-            # - name: SLACK_APPROVALS_CHANNEL
-            #   value: approvals
-            # - name: HIPCHAT_TOKEN
-            #   value: your-token-here
-            # - name: HIPCHAT_CHANNELS
-            #   value: keel-bot
-            # - name: HIPCHAT_APPROVALS_CHANNEL
-            #   value: "111111_keel-approvals@conf.hipchat.com"
-            # - name: HIPCHAT_APPROVALS_BOT_NAME
-            #   value: "Mr Bor"
-            # - name: HIPCHAT_APPROVALS_USER_NAME
-            #   value: "111111_2222222"
-            # - name: HIPCHAT_APPROVALS_PASSWORT
-            #   value: "pass"
-            # - name: MATTERMOST_ENDPOINT
-            #   value: ""
+            - name: SLACK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: keel-slack
+                  key: slack-token
+            - name: SLACK_CHANNELS
+              value: "deployments"
+            - name: SLACK_APPROVALS_CHANNEL
+              value: "deployments"
           name: keel
           command: ["/bin/keel"]
           ports:
