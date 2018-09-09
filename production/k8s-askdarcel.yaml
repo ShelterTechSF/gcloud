@@ -14,6 +14,11 @@ kind: Deployment
 metadata:
  labels:
    app: web
+   keel.sh/policy: all
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+ annotations:
+   keel.sh/pollSchedule: "@every 1m"
  name: web
 spec:
  selector:
@@ -80,6 +85,11 @@ kind: Deployment
 metadata:
  labels:
    app: api
+   keel.sh/policy: all
+   keel.sh/trigger: poll
+   keel.sh/approvals: "1"
+ annotations:
+   keel.sh/pollSchedule: "@every 1m"
  name: api
 spec:
  selector:
