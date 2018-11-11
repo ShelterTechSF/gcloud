@@ -31,7 +31,7 @@ spec:
        app: web
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-web:v1.13
+     - image: index.docker.io/sheltertechsf/askdarcel-web:1.14.3
        name: web
        ports:
        - containerPort: 80
@@ -41,8 +41,6 @@ spec:
            secretKeyRef:
               name: algolia
               key: algolia-application-id
-       - name: ALGOLIA_INDEX
-         value: "production_services_search"
        - name: ALGOLIA_INDEX_PREFIX
          value: "production"
        - name: ALGOLIA_READ_ONLY_API_KEY
@@ -102,7 +100,7 @@ spec:
        app: api
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-api:v1.13
+     - image: index.docker.io/sheltertechsf/askdarcel-api:1.14.3
        name: api
        ports:
        - containerPort: 8080
@@ -117,8 +115,6 @@ spec:
            secretKeyRef:
               name: algolia
               key: algolia-application-id
-       - name: ALGOLIA_INDEX
-         value: "production_services_search"
        - name: ALGOLIA_INDEX_PREFIX
          value: "production"
        - name: ALGOLIA_READ_ONLY_API_KEY
