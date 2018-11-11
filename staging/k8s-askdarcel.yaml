@@ -40,8 +40,6 @@ spec:
            secretKeyRef:
               name: algolia
               key: algolia-application-id
-       - name: ALGOLIA_INDEX
-         value: "staging_services_search"
        - name: ALGOLIA_INDEX_PREFIX
          value: "staging"
        - name: ALGOLIA_READ_ONLY_API_KEY
@@ -115,8 +113,6 @@ spec:
            secretKeyRef:
               name: algolia
               key: algolia-application-id
-       - name: ALGOLIA_INDEX
-         value: "staging_services_search"
        - name: ALGOLIA_INDEX_PREFIX
          value: "staging"
        - name: ALGOLIA_READ_ONLY_API_KEY
