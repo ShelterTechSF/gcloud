@@ -138,7 +138,7 @@ spec:
               name: secret-key
               key: secret-key-base
      - name: cloudsql-proxy
-       image: gcr.io/cloudsql-docker/gce-proxy:1.11
+       image: gcr.io/cloudsql-docker/gce-proxy:1.13
        command: ["/cloud_sql_proxy",
        "-instances=askdarcel-staging-208823:us-central1:askdarcel-staging-db=tcp:5432",
         "-credential_file=/secrets/cloudsql/credentials.json"]
