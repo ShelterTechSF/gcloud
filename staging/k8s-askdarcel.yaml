@@ -137,6 +137,8 @@ spec:
            secretKeyRef:
               name: secret-key
               key: secret-key-base
+       command: ["/bin/sh", "-c"]
+       args: ["cd /home/app/webapp && ./bin/worker_restart.sh"]
      - name: cloudsql-proxy
        image: gcr.io/cloudsql-docker/gce-proxy:1.13
        command: ["/cloud_sql_proxy",
