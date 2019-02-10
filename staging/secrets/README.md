@@ -17,9 +17,9 @@ These are secrets related to a search indexing external service, both the web an
 kubectl create secret generic algolia --from-file /tmp/askdarcel-staging-secrets/algolia-application-id --from-file /tmp/askdarcel-staging-secrets/algolia-read-only-api-key --from-file /tmp/askdarcel-staging-secrets/algolia-api-key
 ```
 ## Google API
-This is the API key for sending requests for the maps and geolocation APIs
+This is the frontend and backend API key for sending requests for the maps and geolocation APIs
 ```
-kubectl create secret generic google --from-file /tmp/askdarcel-staging-secrets/google-api-key
+kubectl create secret generic google --from-file /tmp/askdarcel-staging-secrets/frontend-google-api-key --from-file /tmp/askdarcel-staging-secrets/backend-google-api-key
 ```
 ## Database Credentials
 Database credentials for Postgres
