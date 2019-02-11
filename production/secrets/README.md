@@ -19,7 +19,7 @@ kubectl create secret generic algolia --from-file /tmp/askdarcel-production-secr
 ## Google API
 This is the API key for sending requests for the maps and geolocation APIs
 ```
-kubectl create secret generic google --from-file /tmp/askdarcel-production-secrets/google-api-key
+kubectl create secret generic google --from-file /tmp/askdarcel-production-secrets/frontend-google-api-key --from-file /tmp/askdarcel-production-secrets/backend-google-api-key
 ```
 ## Database Credentials
 Database credentials for Postgres
