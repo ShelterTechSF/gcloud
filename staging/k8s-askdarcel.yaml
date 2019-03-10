@@ -61,7 +61,7 @@ spec:
        - name: SERVER_NAME
          value: "staging.askdarcel.org"
        - name: MOHCD_SUBDOMAIN
-         value: help
+         value: "sfserviceguide"
      restartPolicy: Always
 ---
 apiVersion: v1
