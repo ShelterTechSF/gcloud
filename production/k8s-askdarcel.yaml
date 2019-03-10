@@ -63,6 +63,8 @@ spec:
          value: "www.askdarcel.org"
        - name: MOHCD_SUBDOMAIN
          value: help
+       - name: MOHCD_DOMAIN
+         value: sfserviceguide
      restartPolicy: Always
 ---
 apiVersion: v1
