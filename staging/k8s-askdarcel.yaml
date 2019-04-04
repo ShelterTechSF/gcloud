@@ -159,6 +159,83 @@ spec:
            secretName: cloudsql-instance-credentials
      restartPolicy: Always
 ---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: askdarcel-algolia-reindex
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: index.docker.io/sheltertechsf/askdarcel-api:latest
+            name: askdarcel-algolia-reindex
+            resources:
+              limits:
+                cpu: "0.5"
+              requests:
+                cpu: "0.1"
+            args:
+            - /bin/sh
+            - -c
+            - cd /home/app/webapp && bundle exec rake algolia:reindex
+            env:
+            - name: ALGOLIA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: algolia
+                   key: algolia-api-key
+            - name: ALGOLIA_APPLICATION_ID
+              valueFrom:
+                secretKeyRef:
+                   name: algolia
+                   key: algolia-application-id
+            - name: ALGOLIA_INDEX_PREFIX
+              value: "staging"
+            - name: ALGOLIA_READ_ONLY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                   name: algolia
+                   key: algolia-read-only-api-key
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                   name: database
+                   key: database-password
+            - name: DATABASE_URL
+              value: "postgres://localhost:5432/askdarcel"
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                   name: database
+                   key: database-username
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google
+                  key: backend-google-api-key
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                   name: secret-key
+                   key: secret-key-base
+          - name: cloudsql-proxy
+            image: gcr.io/cloudsql-docker/gce-proxy:1.13
+            command: ["/cloud_sql_proxy",
+            "-instances=askdarcel-staging-208823:us-central1:askdarcel-staging-db=tcp:5432",
+             "-credential_file=/secrets/cloudsql/credentials.json"]
+            volumeMounts:
+              - name: cloudsql-instance-credentials
+                mountPath: /secrets/cloudsql
+                readOnly: true
+          volumes:
+            - name: cloudsql-instance-credentials
+              secret:
+                secretName: cloudsql-instance-credentials
+          restartPolicy: OnFailure
+---
 apiVersion: v1
 kind: Service
 metadata:
