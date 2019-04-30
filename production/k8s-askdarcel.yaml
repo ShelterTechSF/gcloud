@@ -166,13 +166,13 @@ kind: CronJob
 metadata:
   name: askdarcel-algolia-reindex
 spec:
-  schedule: "0 * * * *"
+  schedule: "0 0 * * 0"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - image: index.docker.io/sheltertechsf/askdarcel-api:1.17.0
+          - image: index.docker.io/sheltertechsf/askdarcel-api:1.18
             name: askdarcel-algolia-reindex
             resources:
               limits:
