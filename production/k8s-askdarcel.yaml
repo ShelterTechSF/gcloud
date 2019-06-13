@@ -166,7 +166,7 @@ kind: CronJob
 metadata:
   name: askdarcel-algolia-reindex
 spec:
-  schedule: "0 0 * * 0"
+  schedule: "0 0 * * *"
   concurrencyPolicy: Replace
   jobTemplate:
     spec:
