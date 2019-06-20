@@ -128,7 +128,7 @@ spec:
               name: database
               key: database-password
        - name: DATABASE_URL
-         value: "postgres://replaceme:5432/askdarcel"
+         value: "postgres://localhost:5432/askdarcel"
        - name: DATABASE_USERNAME
          valueFrom:
            secretKeyRef:
@@ -193,7 +193,7 @@ spec:
                    name: database
                    key: database-password
             - name: DATABASE_URL
-              value: "postgres://replaceme:5432/askdarcel"
+              value: "postgres://localhost:5432/askdarcel"
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
