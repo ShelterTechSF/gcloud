@@ -144,19 +144,6 @@ spec:
            secretKeyRef:
               name: secret-key
               key: secret-key-base
-     - name: cloudsql-proxy
-       image: gcr.io/cloudsql-docker/gce-proxy:1.13
-       command: ["/cloud_sql_proxy",
-       "-instances=askdarcel-staging-208823:us-central1:askdarcel-staging-db=tcp:5432",
-        "-credential_file=/secrets/cloudsql/credentials.json"]
-       volumeMounts:
-         - name: cloudsql-instance-credentials
-           mountPath: /secrets/cloudsql
-           readOnly: true
-     volumes:
-       - name: cloudsql-instance-credentials
-         secret:
-           secretName: cloudsql-instance-credentials
      restartPolicy: Always
 ---
 apiVersion: batch/v1beta1
@@ -164,7 +151,8 @@ kind: CronJob
 metadata:
   name: askdarcel-algolia-reindex
 spec:
-  schedule: "0 0 * * 0"
+  schedule: "0 0 * * *"
+  concurrencyPolicy: Replace
   jobTemplate:
     spec:
       template:
@@ -180,7 +168,7 @@ spec:
             args:
             - /bin/sh
             - -c
-            - cd /home/app/webapp && bundle exec rake algolia:reindex
+            - cd /home/app/webapp && bundle exec rake algolia:reindex && exit
             env:
             - name: ALGOLIA_API_KEY
               valueFrom:
@@ -221,19 +209,6 @@ spec:
                 secretKeyRef:
                    name: secret-key
                    key: secret-key-base
-          - name: cloudsql-proxy
-            image: gcr.io/cloudsql-docker/gce-proxy:1.13
-            command: ["/cloud_sql_proxy",
-            "-instances=askdarcel-staging-208823:us-central1:askdarcel-staging-db=tcp:5432",
-             "-credential_file=/secrets/cloudsql/credentials.json"]
-            volumeMounts:
-              - name: cloudsql-instance-credentials
-                mountPath: /secrets/cloudsql
-                readOnly: true
-          volumes:
-            - name: cloudsql-instance-credentials
-              secret:
-                secretName: cloudsql-instance-credentials
           restartPolicy: OnFailure
 ---
 apiVersion: v1
