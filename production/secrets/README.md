@@ -6,11 +6,6 @@ This is the SSL certificate used to TLS handshake for ingress.
 ```
 kubectl create secret tls origin-cert-secret --key /tmp/askdarcel-production-secrets/origin-cert.key --cert /tmp/askdarcel-production-secrets/origin-cert.pem
 ```
-## CloudSQL Sidecar Service Account
-This is a secret that allows the api service to talk to the Cloud SQL instance of Postgres that is outside the K8s cluster.
-```
-kubectl create secret generic cloudsql-instance-credentials --from-file=/tmp/askdarcel-production-secrets/credentials.json=askdarcel-184805-2100b0182a7a.json
-```
 ## Algolia
 These are secrets related to a search indexing external service, both the web and api containers use these
 ```
