@@ -97,7 +97,7 @@ spec:
             # - name: HELM_PROVIDER
             #   value: "1"
             - name: PROJECT_ID
-              value: "askdarcel-staging-208823"
+              value: "askdarcel-184805"
             # - name: WEBHOOK_ENDPOINT
             #   value: https://my.webhookrelay.com/v1/webhooks/2fc52b16-75f7-41f2-8e2d-81afbbcae709
             - name: SLACK_TOKEN

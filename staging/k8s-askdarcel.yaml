@@ -48,7 +48,7 @@ spec:
               name: algolia
               key: algolia-read-only-api-key
        - name: API_URL
-         value: "http://api.default.svc.cluster.local:8080"
+         value: "http://api.staging.svc.cluster.local:8080"
        - name: environment
          value: "production"
        - name: GOOGLE_API_KEY
@@ -128,7 +128,7 @@ spec:
               name: database
               key: database-password
        - name: DATABASE_URL
-         value: "postgres://localhost:5432/askdarcel"
+         value: "postgres://10.34.96.3:5432/askdarcel"
        - name: DATABASE_USERNAME
          valueFrom:
            secretKeyRef:
@@ -193,7 +193,7 @@ spec:
                    name: database
                    key: database-password
             - name: DATABASE_URL
-              value: "postgres://localhost:5432/askdarcel"
+              value: "postgres://10.34.96.3:5432/askdarcel"
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
