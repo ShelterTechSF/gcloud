@@ -31,7 +31,7 @@ spec:
        app: web
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-web:1.18
+     - image: index.docker.io/sheltertechsf/askdarcel-web:1.19
        name: web
        ports:
        - containerPort: 80
@@ -49,7 +49,7 @@ spec:
               name: algolia
               key: algolia-read-only-api-key
        - name: API_URL
-         value: "http://api.default.svc.cluster.local:8080"
+         value: "http://api.production.svc.cluster.local:8080"
        - name: environment
          value: "production"
        - name: GOOGLE_API_KEY
@@ -102,7 +102,7 @@ spec:
        app: api
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-api:1.18
+     - image: index.docker.io/sheltertechsf/askdarcel-api:1.19
        name: api
        ports:
        - containerPort: 8080
@@ -130,7 +130,7 @@ spec:
               name: database
               key: database-password
        - name: DATABASE_URL
-         value: "postgres://localhost:5432/askdarcel"
+         value: "postgres://10.34.96.6:5432/askdarcel"
        - name: DATABASE_USERNAME
          valueFrom:
            secretKeyRef:
@@ -146,19 +146,6 @@ spec:
            secretKeyRef:
               name: secret-key
               key: secret-key-base
-     - name: cloudsql-proxy
-       image: gcr.io/cloudsql-docker/gce-proxy:1.13
-       command: ["/cloud_sql_proxy",
-       "-instances=askdarcel-184805:us-west1:askdarcel-production-db=tcp:5432",
-        "-credential_file=/secrets/cloudsql/credentials.json"]
-       volumeMounts:
-         - name: cloudsql-instance-credentials
-           mountPath: /secrets/cloudsql
-           readOnly: true
-     volumes:
-       - name: cloudsql-instance-credentials
-         secret:
-           secretName: cloudsql-instance-credentials
      restartPolicy: Always
 ---
 apiVersion: batch/v1beta1
@@ -173,7 +160,7 @@ spec:
       template:
         spec:
           containers:
-          - image: index.docker.io/sheltertechsf/askdarcel-api:1.18
+          - image: index.docker.io/sheltertechsf/askdarcel-api:1.19
             name: askdarcel-algolia-reindex
             resources:
               limits:
@@ -183,7 +170,7 @@ spec:
             args:
             - /bin/sh
             - -c
-            - cd /home/app/webapp && bundle exec rake algolia:reindex
+            - cd /home/app/webapp && bundle exec rake algolia:reindex && exit
             env:
             - name: ALGOLIA_API_KEY
               valueFrom:
@@ -208,7 +195,7 @@ spec:
                    name: database
                    key: database-password
             - name: DATABASE_URL
-              value: "postgres://localhost:5432/askdarcel"
+              value: "postgres://10.34.96.6:5432/askdarcel"
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -224,19 +211,6 @@ spec:
                 secretKeyRef:
                    name: secret-key
                    key: secret-key-base
-          - name: cloudsql-proxy
-            image: gcr.io/cloudsql-docker/gce-proxy:1.13
-            command: ["/cloud_sql_proxy",
-            "-instances=askdarcel-184805:us-west1:askdarcel-production-db=tcp:5432",
-             "-credential_file=/secrets/cloudsql/credentials.json"]
-            volumeMounts:
-              - name: cloudsql-instance-credentials
-                mountPath: /secrets/cloudsql
-                readOnly: true
-          volumes:
-            - name: cloudsql-instance-credentials
-              secret:
-                secretName: cloudsql-instance-credentials
           restartPolicy: OnFailure
 ---
 apiVersion: v1
