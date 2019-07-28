@@ -149,9 +149,9 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: askdarcel-algolia-reindex
+  name: askdarcel-algolia-incremental-index
 spec:
-  schedule: "0 0 * * *"
+  schedule: "* * * * *"
   concurrencyPolicy: Replace
   jobTemplate:
     spec:
@@ -159,7 +159,7 @@ spec:
         spec:
           containers:
           - image: index.docker.io/sheltertechsf/askdarcel-api:latest
-            name: askdarcel-algolia-reindex
+            name: askdarcel-algolia-incremental-index
             resources:
               limits:
                 cpu: "0.5"
@@ -168,7 +168,7 @@ spec:
             args:
             - /bin/sh
             - -c
-            - cd /home/app/webapp && bundle exec rake algolia:reindex && exit
+            - cd /home/app/webapp && bundle exec rake algolia:incremental_index && exit
             env:
             - name: ALGOLIA_API_KEY
               valueFrom:
