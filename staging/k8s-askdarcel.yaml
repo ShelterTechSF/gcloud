@@ -23,7 +23,7 @@ spec:
  selector:
    matchLabels:
      app: web
- replicas: 1
+ replicas: 2
  template:
    metadata:
      labels:
@@ -32,6 +32,13 @@ spec:
      containers:
      - image: index.docker.io/sheltertechsf/askdarcel-web:latest
        name: web
+       resources:
+         requests:
+           cpu: 200m
+           memory: 100Mi
+         limits:
+           cpu: 400m
+           memory: 200Mi
        ports:
        - containerPort: 80
        env:
@@ -64,7 +71,6 @@ spec:
          value: help
        - name: MOHCD_DOMAIN
          value: sfserviceguide
-     restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -73,7 +79,7 @@ metadata:
    app: web
  name: web
 spec:
- type: LoadBalancer
+ type: NodePort
  ports:
  - port: 80
  selector:
@@ -93,7 +99,7 @@ spec:
  selector:
    matchLabels:
      app: api
- replicas: 1
+ replicas: 2
  template:
    metadata:
      labels:
@@ -102,6 +108,13 @@ spec:
      containers:
      - image: index.docker.io/sheltertechsf/askdarcel-api:latest
        name: api
+       resources:
+         requests:
+           cpu: 200m
+           memory: 512Mi
+         limits:
+           cpu: 400m
+           memory: 1Gi
        ports:
        - containerPort: 8080
        env:
@@ -152,7 +165,9 @@ metadata:
   name: askdarcel-algolia-reindex
 spec:
   schedule: "0 0 * * *"
-  concurrencyPolicy: Replace
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
@@ -161,10 +176,12 @@ spec:
           - image: index.docker.io/sheltertechsf/askdarcel-api:latest
             name: askdarcel-algolia-reindex
             resources:
-              limits:
-                cpu: "0.5"
               requests:
-                cpu: "0.1"
+                cpu: 200m
+                memory: 512Mi
+              limits:
+                cpu: 400m
+                memory: 1Gi
             args:
             - /bin/sh
             - -c
