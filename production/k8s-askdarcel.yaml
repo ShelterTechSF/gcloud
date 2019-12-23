@@ -146,6 +146,11 @@ spec:
            secretKeyRef:
               name: secret-key
               key: secret-key-base
+       - name: AIRTABLE_API_KEY
+         valueFrom:
+           secretKeyRef:
+              name: airtable
+              key: airtable-api-key
      restartPolicy: Always
 ---
 apiVersion: batch/v1beta1
@@ -211,6 +216,11 @@ spec:
                 secretKeyRef:
                    name: secret-key
                    key: secret-key-base
+            - name: AIRTABLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: airtable
+                  key: airtable-api-key
           restartPolicy: OnFailure
 ---
 apiVersion: v1

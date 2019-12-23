@@ -26,3 +26,8 @@ Not sure what this is for
 ```
 kubectl create secret generic secret-key --from-file /tmp/askdarcel-production-secrets/secret-key-base
 ```
+## Airtable API Key
+Data things, ask Max
+```
+kubectl create secret generic airtable --from-file /tmp/askdarcel-production-secrets/airtable-api-key
+```
