@@ -27,7 +27,7 @@ Not sure what this is for
 kubectl create secret generic secret-key --from-file /tmp/askdarcel-staging-secrets/secret-key-base
 ```
 ## Airtable API Key
-Data things, ask Max
+Pushes basic updates in our DB to https://airtable.com/appItSYNzRjTx08hN/ , the tool we use to log the progress of vetting our data (i.e. at Datathons). Login to Airtable via the tools@sheltertech.org google account or ask on Slack for details.
 ```
 kubectl create secret generic airtable --from-file /tmp/askdarcel-staging-secrets/airtable-api-key
 ```
