@@ -24,15 +24,22 @@ spec:
  selector:
    matchLabels:
      app: web
- replicas: 1
+ replicas: 2
  template:
    metadata:
      labels:
        app: web
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-web:1.19
+     - image: index.docker.io/sheltertechsf/askdarcel-web:1.23.3
        name: web
+       resources:
+         requests:
+           cpu: 200m
+           memory: 100Mi
+         limits:
+           cpu: 400m
+           memory: 200Mi
        ports:
        - containerPort: 80
        env:
@@ -74,7 +81,7 @@ metadata:
    app: web
  name: web
 spec:
- type: LoadBalancer
+ type: NodePort
  ports:
  - port: 80
  selector:
@@ -95,15 +102,22 @@ spec:
  selector:
    matchLabels:
      app: api
- replicas: 1
+ replicas: 2
  template:
    metadata:
      labels:
        app: api
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-api:1.19
+     - image: index.docker.io/sheltertechsf/askdarcel-api:1.22
        name: api
+       resources:
+         requests:
+           cpu: 300m
+           memory: 1Gi
+         limits:
+           cpu: 600m
+           memory: 2Gi
        ports:
        - containerPort: 8080
        env:
@@ -159,19 +173,23 @@ metadata:
   name: askdarcel-algolia-reindex
 spec:
   schedule: "0 0 * * *"
-  concurrencyPolicy: Replace
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - image: index.docker.io/sheltertechsf/askdarcel-api:1.19
+          - image: index.docker.io/sheltertechsf/askdarcel-api:1.22
             name: askdarcel-algolia-reindex
             resources:
-              limits:
-                cpu: "0.5"
               requests:
-                cpu: "0.1"
+                cpu: 300m
+                memory: 1Gi
+              limits:
+                cpu: 600m
+                memory: 2Gi
             args:
             - /bin/sh
             - -c
@@ -222,7 +240,7 @@ spec:
                   name: airtable
                   key: airtable-api-key
           restartPolicy: OnFailure
----
+--- 
 apiVersion: v1
 kind: Service
 metadata:
