@@ -31,7 +31,7 @@ spec:
        app: web
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-web:1.23.3
+     - image: index.docker.io/sheltertechsf/askdarcel-web:1.24
        name: web
        resources:
          requests:
@@ -109,7 +109,7 @@ spec:
        app: api
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-api:1.22
+     - image: index.docker.io/sheltertechsf/askdarcel-api:1.24
        name: api
        resources:
          requests:
@@ -181,7 +181,7 @@ spec:
       template:
         spec:
           containers:
-          - image: index.docker.io/sheltertechsf/askdarcel-api:1.22
+          - image: index.docker.io/sheltertechsf/askdarcel-api:1.24
             name: askdarcel-algolia-reindex
             resources:
               requests:
