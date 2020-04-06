@@ -141,7 +141,7 @@ spec:
               name: database
               key: database-password
        - name: DATABASE_URL
-         value: "postgres://10.34.96.3:5432/askdarcel"
+         value: "postgres://10.34.96.19:5432/askdarcel"
        - name: DATABASE_USERNAME
          valueFrom:
            secretKeyRef:
@@ -215,7 +215,7 @@ spec:
                    name: database
                    key: database-password
             - name: DATABASE_URL
-              value: "postgres://10.34.96.3:5432/askdarcel"
+              value: "postgres://10.34.96.19:5432/askdarcel"
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
