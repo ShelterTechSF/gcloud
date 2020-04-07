@@ -31,7 +31,7 @@ spec:
        app: web
    spec:
      containers:
-     - image: index.docker.io/sheltertechsf/askdarcel-web:1.24
+     - image: index.docker.io/sheltertechsf/askdarcel-web:1.24.3
        name: web
        resources:
          requests:
@@ -171,6 +171,13 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: askdarcel-algolia-reindex
+  labels:
+    app: askdarcel-algolia-reindex
+    keel.sh/policy: all
+    keel.sh/trigger: poll
+    keel.sh/approvals: "1"
+  annotations:
+    keel.sh/pollSchedule: "@every 1m"
 spec:
   schedule: "0 0 * * *"
   concurrencyPolicy: Forbid
