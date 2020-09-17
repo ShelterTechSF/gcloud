@@ -46,6 +46,7 @@ rules:
       - ""
       - extensions
       - apps
+      - batch
     resources:
       - pods
       - replicasets
@@ -54,6 +55,7 @@ rules:
       - deployments
       - daemonsets
       - jobs
+      - cronjobs
     verbs:
       - get
       - delete # required to delete pods during force upgrade of the same tag
@@ -86,7 +88,7 @@ spec:
     spec:
       serviceAccountName: keel
       containers:
-        - image: keelhq/keel:0.8.3
+        - image: keelhq/keel:0.15.1
           imagePullPolicy: Always
           env:
             - name: POLL
